@@ -57,8 +57,6 @@ return dogs;
 
 		}
 	}
-	
-	// -----------
 
 	public static void save(List<Dog> dogs) throws IOException {
 		try {
@@ -86,8 +84,6 @@ return dogs;
 			return;
 		}
 	}
-	
-	
 
 
 	    public static List<Dog> loadFile(String pathToFile) throws FileNotFoundException, IOException {

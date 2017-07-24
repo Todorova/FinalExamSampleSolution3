@@ -8,10 +8,16 @@ public class Database {
 		try {
 					
 			String driver = "com.mysql.cj.jdbc.Driver";
-			String url = "jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11185131";
-			String username = "sql11185131";
-			String password = "Qg4RYfyTHB";
+			String url = "jdbc:mysql://georgialexandrov.eu:3306/animals";
+			String username = "ana";
+			String password = "ngoxl7oZd9rBbIq!";
 			Class.forName(driver);
+			
+			
+//			Root User: ana
+//			Root Password: ngoxl7oZd9rBbIq!
+//			Database Name: animals
+//			Connection URL: mysql://georgialexandrov.eu:3306/
 						
 			Connection conn = DriverManager.getConnection(url,username, password);
 			System.out.println("Connected");
