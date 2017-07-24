@@ -26,26 +26,27 @@ public class DogsTableModel extends AbstractTableModel {
 		Dog dog = dogs.get(rowIndex);
 		switch(columnIndex) {
 		case 0: return dog.getDate();
-		case 1: return dog.getName();
+		case 1: return dog.getColor();
 		case 2: return dog.getBreed();
-		case 3: return dog.getColor();
-		case 4: return (dog.isMale() ? "Male" : "Female");
-		case 5: return dog.getState();
+		case 3: return (dog.isMale() ? "Male" : "Female");
+		case 4: return dog.getState();
+		case 5: return dog.getName();
 		case 6: return dog.getDateCreated();
 		}
 		
 		return null;
 	}
+	
 
 	@Override
 	public String getColumnName(int column) {
 		switch(column) {
 		case 0: return "Date";
-		case 1: return "Name";
+		case 1: return "Color";
 		case 2: return "Breed";
-		case 3: return "Color";
-		case 4: return "Sex";
-		case 5: return "State";
+		case 3: return "Sex";
+		case 4: return "State";
+		case 5: return "Name";
 		case 6: return "Date Created";
 		default: return "";
 		}
@@ -56,10 +57,5 @@ public class DogsTableModel extends AbstractTableModel {
 		
 		fireTableDataChanged();
 	}
-	
-	
-	
-	//------
-	
 	
 }

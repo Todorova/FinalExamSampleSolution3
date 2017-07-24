@@ -18,17 +18,6 @@ public class Dog {
 	private String name;
 	private String dateCreated;
 	
-//	public Dog() {}
-//	public Dog (String date, String color,String breed, String isMale, String state, String name, String dateCreated ) {
-//	       this.date = date;
-//	        this.name = name;
-//	        this.breed = breed;
-//	        this.color = color;
-//	        this.isMale = isMale.equals("M") ? true : false;
-//	        this.state = state.equals("Lost") ? State.LOST: State.FOUND;
-//	        this.dateCreated = dateCreated;
-//
-//	    }
 	public void setId(int id) {
 		this.id = id;
 	}

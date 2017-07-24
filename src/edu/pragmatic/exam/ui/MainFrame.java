@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.util.List;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
@@ -36,6 +37,8 @@ public class MainFrame extends JFrame {
 	private JButton btnDelete;
 	private List<Dog> dogs;
 	private JButton btnSave;
+	private JButton btnSaveFile;
+	private File selectedFile;
 
 	
 	public static void main(String[] args) {
@@ -91,22 +94,20 @@ public class MainFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {				
 				JFileChooser chooser = new JFileChooser();
 		        chooser.showOpenDialog(null);
-		        File selectedFile = chooser.getSelectedFile();
+		        selectedFile = chooser.getSelectedFile();
 
 		        try {
-					List<Dog> dogs = Utils.loadFile(selectedFile.getAbsolutePath());
+					dogs = Utils.loadFile(selectedFile.getAbsolutePath());
 
 					dogsTableModel.setDogs(dogs);
 				} catch (FileNotFoundException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
 		});
-		btnLoadfile.setBounds(150, 231, 117, 29);
+		btnLoadfile.setBounds(140, 231, 117, 29);
 		contentPane.add(btnLoadfile);
 		
 		
@@ -117,7 +118,7 @@ public class MainFrame extends JFrame {
 				deleteSelectedDog();				
 			}
 		});
-		btnDelete.setBounds(270, 231, 117, 29);
+		btnDelete.setBounds(260, 231, 117, 29);
 		contentPane.add(btnDelete);
 		
 		
@@ -128,10 +129,37 @@ public class MainFrame extends JFrame {
 				saveDogs();
 			}
 		});
-		btnSave.setBounds(390, 231, 117, 29);
+		btnSave.setBounds(380, 231, 117, 29);
 		contentPane.add(btnSave);
 		updateDeleteButton();
 		
+		
+		btnSaveFile = new JButton("Save File");
+		btnSaveFile.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				saveF();
+			}
+		});
+		btnSaveFile.setBounds(500, 231, 117, 29);
+		contentPane.add(btnSaveFile);
+		updateDeleteButton();
+		
+	}
+	private void saveF() {
+		JFileChooser chooser = new JFileChooser();
+		int result = chooser.showSaveDialog(this);
+		if(result == JFileChooser.APPROVE_OPTION) {
+			File f = chooser.getSelectedFile();
+			try {
+				Utils.saveFile(f, dogs);
+			} catch (IOException ex) {
+				JOptionPane.showMessageDialog(this,
+						"Unable to save file",
+						"Error",
+						JOptionPane.ERROR_MESSAGE);
+			}
+		}
 	}
 	
 	
@@ -146,31 +174,37 @@ public class MainFrame extends JFrame {
 	}
 	
 	private void deleteSelectedDog() {
-		Connection conn;
+		
 		try {
 			int selectedRowIndex = dogsTable.getSelectionModel().getMinSelectionIndex();
 			
-			if(selectedRowIndex != -1) {
+			if(selectedFile == null) {
+				Connection conn;
 				conn = Database.getConnection();		
 				String query= "DELETE FROM Animals WHERE id = ? ";
 				int idInt = dogs.get(selectedRowIndex).getId();
 				System.out.println(idInt);
+				System.out.println(query);
 				PreparedStatement preparedStatement = conn.prepareStatement(query);
 				preparedStatement.setInt(1,idInt);
-				preparedStatement.executeUpdate();
+				preparedStatement.execute();
 
 				conn.close();
 				dogs.remove(selectedRowIndex);
 				dogsTableModel.setDogs(dogs);
+			} else {
+				if(selectedRowIndex >= 0) {
+					 dogs.remove(selectedRowIndex);
+					 dogsTableModel.setDogs(dogs);
+					 }
 			}
 			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		} 					
 }
-	
-	
+
+
 	
 	private void saveDogs() {
 		try {
@@ -184,5 +218,8 @@ public class MainFrame extends JFrame {
 	private void updateDeleteButton() {
 		int selectedRowIndex = dogsTable.getSelectionModel().getMinSelectionIndex();
 		btnDelete.setEnabled(selectedRowIndex != -1);
+		int row = dogsTable.getSelectedRow();
+		btnDelete.setEnabled(row > 0);
+		
 	}
 }
